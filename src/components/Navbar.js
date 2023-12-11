@@ -6,6 +6,7 @@ const NavbarContainer = styled.div`
 	width: 100%;
 	background-color: #51513d;
 	color: #e3dcc2;
+	box-sizing: border-box;
 `;
 
 const Nav = styled.div`

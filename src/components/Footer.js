@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const FooterDiv = styled.div`
-	position: fixed;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -13,7 +12,7 @@ const FooterDiv = styled.div`
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-evenly;
-	padding: 10px;
+	margin-top: 30px;
 `;
 
 const FooterBrand = styled.a`
