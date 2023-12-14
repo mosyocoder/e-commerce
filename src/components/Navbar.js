@@ -22,6 +22,12 @@ const NavLink = styled(Link)`
 	text-decoration: none;
 	margin-right: 50px;
 	color: #e3dcc2;
+	transition: all 1s;
+
+	&:hover {
+		color: #1b2021;
+		cursor: pointer;
+	}
 `;
 
 function Navbar() {

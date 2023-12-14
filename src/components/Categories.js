@@ -23,13 +23,17 @@ const CategoriesButton = styled.button`
 	border: none;
 	cursor: pointer;
 
+	border-bottom: ${(props) => (props.$selected === "selected" ? "1px solid #1b2021 !important" : "none")};
+	font-weight: ${(props) => (props.$selected === "selected" ? "bold" : "")};
+	font-size: ${(props) => (props.$selected === "selected" ? "15px" : "")};
+
 	&:hover {
 		border-bottom: 1px solid #1b2021;
 	}
 `;
 
 function Categories() {
-	const { category, setCategory } = useContext(CategoryContext);
+	const { category, setCategory, filter, setFilter } = useContext(CategoryContext);
 	const categoryTitle = [];
 
 	useEffect(() => {
@@ -55,11 +59,15 @@ function Categories() {
 		<CategoriesContainer>
 			<CategoriesUl>
 				<li>
-					<CategoriesButton>All Products</CategoriesButton>
+					<CategoriesButton $selected={filter === "all" ? "selected" : ""} onClick={() => setFilter("all")}>
+						All Products
+					</CategoriesButton>
 				</li>
 				{categoryTitle.map((item, ix) => (
 					<li key={ix}>
-						<CategoriesButton>{item.title}</CategoriesButton>
+						<CategoriesButton $selected={filter === item.category ? "selected" : ""} onClick={() => setFilter(item.category)}>
+							{item.title}
+						</CategoriesButton>
 					</li>
 				))}
 			</CategoriesUl>

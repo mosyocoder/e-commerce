@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
 import Categories from "./Categories";
-import "./style.css";
+import { CategoryContext } from "../context/CategoryContext";
 
 const ProductsContainer = styled.div`
 	max-width: 90%;
@@ -33,39 +33,112 @@ const ProductCard = styled.div`
 	margin: 10px;
 `;
 
+const ProductTumb = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	background: #f0f0f0;
+
+	img {
+		max-height: 150px;
+	}
+`;
+
+const ProductDetails = styled.div`
+	padding: 20px;
+
+	h4 a {
+		font-weight: 500;
+		display: block;
+		margin-bottom: 18px;
+		text-transform: uppercase;
+		color: #363636;
+		text-decoration: none;
+		transition: 0.3s;
+	}
+
+	h4 a:hover {
+		color: #fbb72c;
+	}
+`;
+
+const ProductsCategory = styled.span`
+	display: block;
+	font-size: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #ccc;
+	margin-bottom: 10px;
+`;
+
+const ProductBotDetails = styled.div`
+	overflow: hidden;
+	border-top: 1px solid #eee;
+	padding-top: 10px;
+
+	div {
+		float: left;
+		width: 50%;
+	}
+`;
+
+const ProductPrice = styled.div`
+	font-size: 18px;
+	color: #fbb72c;
+	font-weight: 600;
+`;
+
+const ProductLinks = styled.div`
+	text-align: right;
+
+	a {
+		display: inline-block;
+		margin-left: 5px;
+		color: #e1e1e1;
+		transition: 0.3s;
+		font-size: 17px;
+	}
+	a:hover {
+		color: #fbb72c;
+	}
+`;
+
 function Products() {
-	const [data, setData] = useState([]);
+    const [data,setData] = useState([])
+	const {filter } = useContext(CategoryContext);
+
 
 	useEffect(() => {
-		axios.get("https://dummyjson.com/products").then((res) => setData(res.data.products));
-	}, []);
+		axios.get(filter === "all" ? "https://dummyjson.com/products?limit=100" : `https://dummyjson.com/products/category/${filter}`).then((res) => setData(res.data.products));
+	}, [filter]);
 
 	return (
 		<ProductsContainer>
 			<Categories />
 			<ProductsDiv>
-				{data.map((item) => (
-					<ProductCard>
-						<div class="product-tumb">
+				{data.map((item, ix) => (
+					<ProductCard key={ix}>
+						<ProductTumb>
 							<img src={item.thumbnail} alt="" />
-						</div>
-						<div class="product-details">
-							<span class="product-catagory">{item.category}</span>
+						</ProductTumb>
+						<ProductDetails>
+							<ProductsCategory>{item.category}</ProductsCategory>
 							<h4>
-								<a href="">{item.title}</a>
+								<a href={`/product/${item.id}`}>{item.title}</a>
 							</h4>
-							<div class="product-bottom-details">
-								<div class="product-price">$ {item.price}</div>
-								<div class="product-links">
+							<ProductBotDetails>
+								<ProductPrice>$ {item.price}</ProductPrice>
+								<ProductLinks>
 									<a href="">
 										<i className="fa fa-heart"></i>
 									</a>
 									<a href="">
 										<i className="fa fa-shopping-cart"></i>
 									</a>
-								</div>
-							</div>
-						</div>
+								</ProductLinks>
+							</ProductBotDetails>
+						</ProductDetails>
 					</ProductCard>
 				))}
 			</ProductsDiv>
