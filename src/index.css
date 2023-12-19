@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-@import "~react-image-gallery/styles/css/image-gallery.css";
 
 body{
     margin: 0;
@@ -9,11 +8,16 @@ body{
 }
 
 .image-gallery{
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #1b2021;
+    border-radius: 15px;
     width: 50%;
-    max-height: 500px;
+    max-height: 400px;
 }
 
 .image-gallery-image{
-    min-height: 500px;
-    max-height: 500px!important;
+    border-radius: 15px;
+    min-height: 400px;
+    max-height: 400px!important;
 }
