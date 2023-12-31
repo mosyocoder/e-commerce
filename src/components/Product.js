@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -7,7 +7,8 @@ import { Rating } from "@smastrom/react-rating";
 
 import "@smastrom/react-rating/style.css";
 import "./style.css";
-import { button } from "../assets/button";
+import { likeButton, addCartButton } from "../assets/buttons";
+import { CategoryContext } from "../context/CategoryContext";
 
 const ProductContainer = styled.div`
 	width: 1200px;
@@ -16,7 +17,11 @@ const ProductContainer = styled.div`
 	flex-direction: column;
 `;
 
-const ProductCategory = styled.div``;
+const ProductCategory = styled.div`
+	a {
+		color: #51513d;
+	}
+`;
 
 const ProductDetails = styled.div`
 	display: grid;
@@ -106,23 +111,9 @@ function Product({ params }) {
 	const [product, setProduct] = useState();
 	const [slide, setSlide] = useState(0);
 
+	const { likedProducts, setLikedProducts, cartProducts, setCartProducts } = useContext(CategoryContext);
+
 	const { id } = useParams(params);
-
-	const likes = JSON.parse(localStorage.getItem("likes"));
-	const bag = JSON.parse(localStorage.getItem("bag"));
-
-	const [likeInLocal, setLikeInLocal] = useState(false);
-	const [bagInLocal, setBagInLocal] = useState(false);
-
-	useEffect(() => {
-		likes?.find((item) => {
-			if (item === product?.id) setLikeInLocal(true);
-		});
-
-		bag?.forEach((item) => {
-			if (item === product?.id) setBagInLocal(true);
-		});
-	}, [likes, bag]);
 
 	useEffect(() => {
 		axios.get(`https://dummyjson.com/products/${id}`).then((res) => setProduct(res.data));
@@ -149,7 +140,10 @@ function Product({ params }) {
 		<ProductContainer>
 			<ProductCategory>
 				<p>
-					<span>ANASAYFA {">"}</span> {product?.category.toUpperCase()}
+					<span>
+						<a href="/">ANASAYFA</a> {">"}
+					</span>{" "}
+					{product?.category.toUpperCase()}
 				</p>
 			</ProductCategory>
 			<ProductDetails>
@@ -179,11 +173,11 @@ function Product({ params }) {
 					<h1>{product?.price}$</h1>
 					<div style={{ marginTop: 460 }}>
 						<ProductLinks>
-							<button className={likeInLocal ? "inLocal" : ""} onClick={() => button("like", product.id)}>
+							<button className={likedProducts.includes(Number(id)) ? "inLocal" : ""} onClick={() => likeButton(Number(product.id), likedProducts, setLikedProducts)}>
 								<i className="fa fa-heart fa-3x"></i>
 							</button>
 
-							<button className={bagInLocal ? "inLocal" : ""} onClick={() => button("addBag", product.id)}>
+							<button className={cartProducts.includes(Number(id)) ? "inLocal" : ""} onClick={() => addCartButton(product.id, cartProducts, setCartProducts)}>
 								<i className="fa fa-shopping-cart fa-3x"></i>
 							</button>
 						</ProductLinks>

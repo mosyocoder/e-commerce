@@ -38,10 +38,10 @@ function Navbar() {
 					<h1>e-commerce</h1>
 				</NavLink>
 				<div>
-					<NavLink>
+					<NavLink to={"/favorites"}>
 						<i className="fa-regular fa-heart fa-2xl"></i>
 					</NavLink>
-					<NavLink>
+					<NavLink to={"/cart"}>
 						<i className="fa-solid fa-bag-shopping fa-2xl"></i>
 					</NavLink>
 				</div>

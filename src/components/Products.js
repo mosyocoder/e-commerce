@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import Categories from "./Categories";
 import { CategoryContext } from "../context/CategoryContext";
+import { addCartButton, likeButton } from "../assets/buttons";
 
 const ProductsContainer = styled.div`
 	max-width: 90%;
@@ -92,22 +93,25 @@ const ProductPrice = styled.div`
 const ProductLinks = styled.div`
 	text-align: right;
 
-	a {
+	button {
+		background-color: transparent;
+		border: none;
 		display: inline-block;
 		margin-left: 5px;
 		color: #e1e1e1;
 		transition: 0.3s;
 		font-size: 17px;
+		cursor: pointer;
 	}
-	a:hover {
+
+	button:hover {
 		color: #fbb72c;
 	}
 `;
 
 function Products() {
-    const [data,setData] = useState([])
-	const {filter } = useContext(CategoryContext);
-
+	const [data, setData] = useState([]);
+	const { filter, likedProducts, setLikedProducts, cartProducts, setCartProducts } = useContext(CategoryContext);
 
 	useEffect(() => {
 		axios.get(filter === "all" ? "https://dummyjson.com/products?limit=100" : `https://dummyjson.com/products/category/${filter}`).then((res) => setData(res.data.products));
@@ -130,12 +134,12 @@ function Products() {
 							<ProductBotDetails>
 								<ProductPrice>$ {item.price}</ProductPrice>
 								<ProductLinks>
-									<a href="">
+									<button className={likedProducts.includes(Number(item.id)) ? "inLocal" : ""} onClick={() => likeButton(Number(item.id), likedProducts, setLikedProducts)}>
 										<i className="fa fa-heart"></i>
-									</a>
-									<a href="">
+									</button>
+									<button className={cartProducts.includes(Number(item.id)) ? "inLocal" : ""} onClick={() => addCartButton(Number(item.id), cartProducts, setCartProducts)}>
 										<i className="fa fa-shopping-cart"></i>
-									</a>
+									</button>
 								</ProductLinks>
 							</ProductBotDetails>
 						</ProductDetails>
